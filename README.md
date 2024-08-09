@@ -112,3 +112,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+# crd-test步骤总结
+## 1. 安装Operator SDK：
+  - 根据你的操作系统，从Operator SDK GitHub页面下载并安装operator-sdk。
+## 2. 初始化新项目：
+  -  使用`operator-sdk init`命令初始化一个新的Operator项目，设置项目名称、Go模块名称、版本等。
+## 3. 添加APIs服务：
+  - 使用`operator-sdk create api`命令创建一个新的API服务，这将生成CRD定义和相关的Go代码。
+## 4. 定义CRD：
+  - 在生成的api/v1目录下，编辑types.go文件定义你的自定义资源类型和字段。
+## 5. 生成CRD和代码：
+  - 使用`make generate`命令生成CRD定义和相关的Go代码。
+## 6. 编写业务逻辑：
+  - 在`pkg/controller/<your-resource>`目录下，编写处理CRD实例的业务逻辑。
+## 7. 构建Operator镜像：
+  - 使用`operator-sdk build <IMAGE-NAME>`命令构建Operator的Docker镜像。
+## 8. 推送镜像到容器仓库：
+  - 将构建的镜像推送到Docker Hub或其他容器镜像仓库。
+## 9. 部署CRD到Kubernetes：
+  - 使用`kubectl apply -f deploy/crds`命令将CRD定义部署到Kubernetes集群。
+## 10. 部署Operator：
+  - 使用`kubectl apply -f deploy/operator.yaml`命令部署Operator到Kubernetes集群。
+## 11. 配置RBAC：
+  - 确保Operator具有适当的权限来管理CRD资源，这通常在`deploy/role.yaml和deploy/role_binding.yaml`中配置。
+## 12. 创建CRD实例：
+  - 使用`kubectl apply -f <crd-instance.yaml>`命令创建CRD的实例。
+## 13. 验证Operator和CRD实例：
+  - 使用`kubectl get <crd-name>`和`kubectl describe <crd-name> <instance-name>`命令检查CRD实例的状态。
+## 14. 监控和调试：
+  - 监控Operator的日志输出，使用`kubectl logs -f <pod-name>`命令查看实时日志。
+## 15. 更新Operator：
+  - 如果需要更新Operator或CRD定义，修改代码后重新构建和推送镜像，然后更新Kubernetes中的部署。
+## 16. 清理资源：
+  - 当不再需要CRD或Operator时，使用`kubectl delete -f deploy/crds`和`kubectl delete -f deploy/operator.yaml`命令进行清理。
